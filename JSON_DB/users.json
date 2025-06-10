@@ -1,0 +1,82 @@
+{
+  "users": {
+    "uid_123": {
+      "uid": "uid_123",
+      "email": "principal@school.com",
+      "role": "Principal",
+      "firstName": "Amine",
+      "lastName": "Bakkali",
+      "school": "Tangier Science Academy"
+    },
+    "uid_456": {
+      "uid": "uid_456",
+      "email": "admin@school.com",
+      "role": "Administrator",
+      "firstName": "Salma",
+      "lastName": "Zahra",
+      "school": "Tangier Science Academy"
+    },
+    "uid_789": {
+      "uid": "uid_789",
+      "email": "teacher1@school.com",
+      "role": "Teacher",
+      "firstName": "Younes",
+      "lastName": "El Idrissi",
+      "school": "Tangier Science Academy"
+    },
+    "uid_999": {
+      "uid": "uid_999",
+      "email": "mom@gmail.com",
+      "role": "Parent",
+      "firstName": "Khadija",
+      "lastName": "Abarghache",
+      "linkedStudentIds": [
+        "cPcF70DhyUgaL38pU37csaf8Ns23",
+        "anotherStudentId"
+      ]
+    },
+    "cPcF70DhyUgaL38pU37csaf8Ns23": {
+      "uid": "cPcF70DhyUgaL38pU37csaf8Ns23",
+      "email": "najlaeabarghache@etu.uae.ac.ma",
+      "role": "Student",
+      "firstName": "Najlae",
+      "lastName": "Abarghache",
+      "gender": "Female",
+      "birthday": "2001-07-26",
+      "schoolGrade": 6,
+      "linkedTeacherId": "uid_789",
+
+      "playerProfile": {
+        "playerName": "Najlae",
+        "gameLevel": 1,
+        "mathLevel": 4,
+        "coins": 25,
+        "questionsSolved": 320,
+        "skillsToImprove" : ["Vertical Operation Accuracy", "Multiplication", "Division"],
+        "rewardProfile": {
+          "score": 85,
+          "rank": 3,
+          "iScore": 44,
+          "rewardCount": 7,
+          "positives": 120,
+          "negatives": 15
+        }
+      },
+      "gameProgress": {
+        "find_compositions": {
+          "lastScore": 10,
+          "bestScore": 15,
+          "completedAt": "2025-04-05T16:40:00Z"
+        },
+        "vertical_operations": {
+          "lastScore": 8,
+          "bestScore": 10,
+          "completedAt": "2025-04-04T18:00:00Z"
+        }
+      },
+      "achievements": {
+        "badges": ["Quick Thinker", "Accuracy Master"]
+      }
+    }
+  }
+}

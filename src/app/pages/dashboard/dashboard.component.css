@@ -1,0 +1,17 @@
+h2 {
+    max-width: 400px;
+    margin: auto;
+    margin-bottom: 22px;
+    width: 100%;
+}
+
+.teacher-dashboard,
+.admin-dashboard {
+    display: flex;
+}
+  
+.teacher-content,
+.admin-content {
+    flex: 1;
+    background-color: #ffffff;
+}

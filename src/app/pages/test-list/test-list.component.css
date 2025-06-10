@@ -1,0 +1,46 @@
+h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: #2c3e50;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  
+  select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+  }
+  
+  li strong {
+    color: #2c3e50;
+  }
+  
+  div[ng-reflect-ng-if="true"] {
+    margin-top: 20px;
+    font-style: italic;
+    color: #888;
+  }
+  

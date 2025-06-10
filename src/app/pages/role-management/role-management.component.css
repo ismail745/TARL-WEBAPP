@@ -1,0 +1,51 @@
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 16px;
+  }
+  
+  .user-table th,
+  .user-table td {
+    border: 1px solid #ddd;
+    padding: 12px 14px;
+    text-align: left;
+  }
+  
+  .user-table thead {
+    background-color: #f4f4f4;
+  }
+  
+  .user-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .assign-button {
+    margin: 8px;
+    padding: 6px 12px;
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .assign-button:hover {
+    background-color: #303f9f;
+  }
+  
+  select {
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+  
+
+  .unlink-button {
+    background-color: #e53935;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  

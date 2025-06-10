@@ -1,0 +1,156 @@
+<div class="max-w-3xl  mx-auto mt-32 bg-white rounded-xl shadow-lg p-8 border border-blue-200">
+  <h2 class="text-blue-800 text-xl font-bold mb-6 text-center">{{ getTranslation('trackProgress') }}</h2>
+  <div class="flex flex-wrap gap-3 justify-center mb-8">
+    <button
+      *ngFor="let child of children"
+      (click)="openModal(child)"
+      class="bg-blue-100 text-blue-800 px-4 py-2 rounded shadow hover:bg-blue-200 transition font-semibold"
+      [class.bg-blue-400]="selectedChild?.uid === child.uid"
+      [class.text-white]="selectedChild?.uid === child.uid"
+    >
+      {{ child.firstName }} {{ child.lastName }}
+    </button>
+  </div>
+</div>
+
+<!-- نافذة النتائج -->
+<div
+  *ngIf="showModal && selectedChild && childResults"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+>
+  <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full relative">
+    <button
+      (click)="closeModal()"
+      class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl font-bold"      [attr.aria-label]="getTranslation('close')"
+    >&times;</button>
+    <h3 class="text-blue-700 text-lg font-semibold mb-4 text-center">
+      {{ getTranslation('results') }} {{ selectedChild.firstName }} {{ selectedChild.lastName }}
+    </h3>
+    <div class="overflow-x-auto">      <table class="min-w-full table-auto bg-white rounded-lg overflow-hidden shadow-sm border border-blue-100">
+        <thead class="bg-blue-100 text-blue-900 text-sm uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-2">{{ getTranslation('game') }}</th>
+            <th class="px-4 py-2">{{ getTranslation('level') }}</th>
+            <th class="px-4 py-2">{{ getTranslation('result') }}</th>
+            <th class="px-4 py-2">{{ getTranslation('correct') }}</th>
+            <th class="px-4 py-2">{{ getTranslation('attempts') }}</th>
+            <th class="px-4 py-2">{{ getTranslation('statistics') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="childResults && childResults.answers">
+            <!-- Find Composition -->
+            <tr class="bg-blue-50 border-t-4 border-blue-300">
+              <td rowspan="3" class="px-4 py-2 font-bold align-middle">{{ getTranslation('findComposition') }}</td>
+              <td class="px-4 py-2">{{ getTranslation('easy') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.easy.score }}</td>              <td class="px-4 py-2">{{ childResults.answers.findcomposition.easy.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.easy.attemptsUsed }}</td>
+              <td rowspan="3" class="px-4 py-2 align-middle text-center">
+                <button                  class="bg-blue-200 hover:bg-blue-300 text-blue-800 font-bold py-1 px-2 rounded cursor-pointer"
+                  (click)="showBarChart('findcomposition')"
+                  [title]="getTranslation('showChart')"
+                >📊</button>
+              </td>
+            </tr>            <tr class="bg-blue-50">
+              <td class="px-4 py-2">{{ getTranslation('medium') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.medium.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.medium.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.medium.attemptsUsed }}</td>
+            </tr>            <tr class="bg-blue-50">
+              <td class="px-4 py-2">{{ getTranslation('hard') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.hard.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.hard.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.findcomposition.hard.attemptsUsed }}</td>
+            </tr>
+
+            <!-- Write Numbers in Letters -->
+            <tr class="bg-green-50 border-t-4 border-green-300">
+              <td rowspan="3" class="px-4 py-2 font-bold align-middle">{{ getTranslation('writeNumberInLetters') }}</td>
+              <td class="px-4 py-2">{{ getTranslation('easy') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.easy.score }}</td>              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.easy.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.easy.attemptsUsed }}</td>
+              <td rowspan="3" class="px-4 py-2 align-middle text-center">
+                <button                  class="bg-green-200 hover:bg-green-300 text-green-800 font-bold py-1 px-2 rounded cursor-pointer"
+                  (click)="showBarChart('WritetheFollowingNumberinLetters')"
+                  [title]="getTranslation('showChart')"
+                >📊</button>
+              </td>
+            </tr>            <tr class="bg-green-50">
+              <td class="px-4 py-2">{{ getTranslation('medium') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.medium.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.medium.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.medium.attemptsUsed }}</td>
+            </tr>
+            <tr class="bg-green-50">
+              <td class="px-4 py-2">{{ getTranslation('hard') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.hard.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.hard.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.WritetheFollowingNumberinLetters.hard.attemptsUsed }}</td>
+            </tr>
+
+            <!-- Identify Place Values -->
+            <tr class="bg-yellow-50 border-t-4 border-yellow-300">
+              <td rowspan="3" class="px-4 py-2 font-bold align-middle">{{ getTranslation('identifyPlace') }}</td>
+              <td class="px-4 py-2">{{ getTranslation('easy') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.easy.score }}</td>              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.easy.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.easy.attemptsUsed }}</td>
+              <td rowspan="3" class="px-4 py-2 align-middle text-center">
+                <button                  class="bg-yellow-200 hover:bg-yellow-300 text-yellow-800 font-bold py-1 px-2 rounded cursor-pointer"
+                  (click)="showBarChart('IdentifthUnitsTensHundredsandThousands')"
+                  [title]="getTranslation('showChart')"
+                >📊</button>
+              </td>
+            </tr>            <tr class="bg-yellow-50">
+              <td class="px-4 py-2">{{ getTranslation('medium') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.medium.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.medium.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.medium.attemptsUsed }}</td>
+            </tr>
+            <tr class="bg-yellow-50">
+              <td class="px-4 py-2">{{ getTranslation('hard') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.hard.score }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.hard.isCorrect ? getTranslation('yes') : getTranslation('no') }}</td>
+              <td class="px-4 py-2">{{ childResults.answers.IdentifthUnitsTensHundredsandThousands.hard.attemptsUsed }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة الرسم البياني -->
+<div 
+  *ngIf="barChartGame"
+  style="z-index:9999"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60"
+>
+  <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full relative">
+    <button
+      (click)="closeBarChart()"
+      class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-2xl font-bold"      [attr.aria-label]="getTranslation('close')"
+    >&times;</button>
+    <h4 class="text-blue-700 text-lg font-semibold mb-4 text-center">
+      {{ getTranslation('chartTitle') }} {{ barChartGame }}
+    </h4>
+    <div class="flex justify-around items-end h-60">
+      <ng-container *ngIf="getGameAnswers(barChartGame)">
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-400 w-8"
+               [style.height.px]="getGameAnswers(barChartGame)?.easy.score * 2"></div>
+          <span class="mt-2 text-xs">{{ getTranslation('easy') }}</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-green-400 w-8"
+               [style.height.px]="getGameAnswers(barChartGame)?.medium.score * 2"></div>
+          <span class="mt-2 text-xs">{{ getTranslation('medium') }}</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-yellow-400 w-8"
+               [style.height.px]="getGameAnswers(barChartGame)?.hard.score * 2"></div>
+          <span class="mt-2 text-xs">{{ getTranslation('hard') }}</span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

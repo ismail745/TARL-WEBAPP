@@ -1,0 +1,53 @@
+input:focus, select:focus {
+  outline: none;
+  border-color: #4682b4;
+  box-shadow: 0 0 0 2px rgba(70, 130, 180, 0.25);
+}
+
+input.border-red-500, select.border-red-500 {
+  border: 1px solid #e57373;
+}
+
+input:hover, select:hover {
+  border-color: #4682b4;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+div[style*="background-color: #e6f4ea"] {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}

@@ -1,0 +1,263 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+  
+  <div class="max-w-8xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+    
+    
+    <div class="p-8 text-center bg-gradient-to-r from-blue-600 to-indigo-600">
+      <div class="inline-flex items-center justify-center h-16 w-16 rounded-full mb-4 bg-white/10 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <h2 class="text-3xl font-bold tracking-wide text-white mb-2">STUDENT REGISTRATION</h2>
+      <p class="mt-2 max-w-2xl mx-auto text-blue-100">
+        Enter student information below. You can add multiple students at once.
+      </p>
+    </div>
+
+    
+    <div class="p-8">
+      <form [formGroup]="studentForm" (ngSubmit)="saveAllStudents()" class="space-y-6">
+        
+        
+        <div *ngIf="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-xl shadow-sm mb-6 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          {{ successMessage }}
+        </div>
+        
+        <div *ngIf="errorMessage" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-xl shadow-sm mb-6 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          {{ errorMessage }}
+        </div>
+        
+        
+        <div formArrayName="students" class="space-y-6">
+          <div *ngFor="let studentGroup of students.controls; let i = index" [formGroupName]="i"
+               class="bg-white rounded-xl shadow-md border border-blue-100 overflow-hidden transition-all duration-200 hover:shadow-lg">
+            
+            
+            <div class="px-6 py-4 flex justify-between items-center bg-gradient-to-r from-blue-600 to-indigo-600">
+              <h3 class="text-lg font-semibold flex items-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Student #{{ i + 1 }}
+              </h3>
+              <button *ngIf="i > 0" type="button" (click)="removeStudent(i)" 
+                      class="p-1.5 rounded-full hover:bg-white/10 transition-colors text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </button>
+            </div>
+            
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- First Name -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  First Name
+                </label>
+                <div class="relative">
+                  <input formControlName="firstName" type="text"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800" />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500">Aa</span>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('firstName')?.invalid && studentGroup.get('firstName')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  First name is required
+                </div>
+              </div>
+
+              <!-- Last Name -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  Last Name
+                </label>
+                <div class="relative">
+                  <input formControlName="lastName" type="text"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800" />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500">Aa</span>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('lastName')?.invalid && studentGroup.get('lastName')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  Last name is required
+                </div>
+              </div>
+
+              <!-- Birth Date -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  Birth Date
+                </label>
+                <div class="relative">
+                  <input formControlName="birthday" type="date"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800" />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('birthday')?.invalid && studentGroup.get('birthday')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  Birth date is required
+                </div>
+              </div>
+
+              <!-- Grade -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  Grade
+                </label>
+                <div class="relative">
+                  <select formControlName="schoolGrade"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800 appearance-none">
+                    <option value="">Select Grade</option>
+                    <option *ngFor="let grade of availableGrades" [value]="grade.name">
+                      {{ grade.name }}
+                    </option>
+                  </select>
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('schoolGrade')?.invalid && studentGroup.get('schoolGrade')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  Grade is required
+                </div>
+              </div>
+
+              <!-- Gender -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 8v8"></path>
+                    <path d="M8 12h8"></path>
+                  </svg>
+                  Gender
+                </label>
+                <div class="relative">
+                  <select formControlName="gender"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800 appearance-none">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 8v8"></path>
+                      <path d="M8 12h8"></path>
+                    </svg>
+                  </div>
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('gender')?.invalid && studentGroup.get('gender')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  Gender is required
+                </div>
+              </div>
+
+              <!-- PIN Code -->
+              <div class="space-y-1">
+                <label class="text-sm flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  PIN Code (4 digits)
+                </label>
+                <div class="relative">
+                  <input formControlName="password" maxlength="4" type="text" placeholder="1234"
+                    class="w-full px-4 py-2 pl-10 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white text-gray-800" />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div *ngIf="studentGroup.get('password')?.invalid && studentGroup.get('password')?.touched" 
+                     class="text-xs mt-1 text-red-500">
+                  PIN code is required (4 digits)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap justify-center gap-4 pt-6">
+          <button type="button" (click)="addStudent()"
+            class="px-6 py-2.5 rounded-xl text-white font-semibold shadow-sm transition-all duration-200 flex items-center gap-2 hover:shadow-md hover:scale-105 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            Add Another Student
+          </button>
+          <button type="submit" [disabled]="studentForm.invalid"
+            class="px-6 py-2.5 rounded-xl text-white font-semibold shadow-sm transition-all duration-200 flex items-center gap-2 hover:shadow-md hover:scale-105 bg-gradient-to-r from-green-600 to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save All Students
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

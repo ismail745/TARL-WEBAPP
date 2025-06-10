@@ -1,0 +1,30 @@
+<div *ngIf="loading">
+    Loading dashboard...
+  </div>
+  
+  <div *ngIf="!loading">
+<app-nav-bar [onSectionSelected]="onSectionSelected.bind(this)"></app-nav-bar>
+    <div  class="teacher-dashboard ">
+        <app-sidebar (sectionSelected)="onSectionSelected($event)"></app-sidebar>
+        <div class="teacher-content ml-64 mt-16 ">
+            <app-teacher-home *ngIf="selectedSection === 'teacher-home'"></app-teacher-home>
+            <app-student-registration *ngIf="selectedSection === 'student-register'"></app-student-registration>
+            <app-student-list *ngIf="selectedSection === 'student-list'"></app-student-list>
+            <app-test-creation *ngIf="selectedSection === 'test-create'"></app-test-creation>
+            <app-test-list *ngIf="selectedSection === 'test-list'"></app-test-list>
+            <app-edit-student *ngIf="selectedSection === 'edit-student'"></app-edit-student>
+            <app-view-student *ngIf="selectedSection === 'view-student'"></app-view-student>
+            <app-parent-list *ngIf="selectedSection === 'parent-list'"></app-parent-list>
+            <app-add-parent *ngIf="selectedSection === 'add-parent'"></app-add-parent>
+            <app-overall-performance *ngIf="selectedSection === 'overall-performance'"></app-overall-performance>
+            <app-view-test *ngIf="selectedSection === 'view-test'"></app-view-test>
+            <app-skill-analysis *ngIf="selectedSection === 'skill-analysis'"></app-skill-analysis>
+            <app-time-statistics *ngIf="selectedSection === 'time-statistics'"></app-time-statistics>
+            <app-student-progress *ngIf="selectedSection === 'student-progress'"></app-student-progress>
+            <app-game-statistics *ngIf="selectedSection === 'game-statistics'"></app-game-statistics>
+            <app-view-parent *ngIf="selectedSection === 'view-parent'"></app-view-parent>
+            <app-edit-test *ngIf="selectedSection === 'edit-test'"></app-edit-test>
+            <app-user-profile *ngIf="selectedSection === 'user-profile'"></app-user-profile>
+        </div>
+    </div>
+  </div>

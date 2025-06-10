@@ -1,0 +1,88 @@
+// Animation for loading spinner
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+// Smooth transitions
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+// Hover effects for table rows
+:host ::ng-deep .hover-bg-4a5a63:hover {
+  background-color: #4a5a63;
+}
+
+// Card hover effects
+.stat-card, 
+.chart-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.875rem;
+  }
+  
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+// Table styling improvements
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  
+  th {
+    &:first-child {
+      border-top-left-radius: 0.5rem;
+    }
+    
+    &:last-child {
+      border-top-right-radius: 0.5rem;
+    }
+  }
+}
+
+// Progress bar animations
+.progress-bar {
+  transition: width 0.5s ease-in-out;
+}
+
+// Difficulty badge styles
+.badge {
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+}

@@ -1,0 +1,447 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+  <div class="max-w-5xl mx-auto">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col justify-center items-center h-[60vh]">
+      <div class="relative w-16 h-16 mb-4">
+        <div class="absolute top-0 left-0 right-0 bottom-0 animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+        <div class="absolute top-2 left-2 right-2 bottom-2 animate-ping rounded-full h-12 w-12 border-4 border-blue-600 border-opacity-30"></div>
+      </div>
+      <p class="mt-4 text-gray-700 font-medium">Loading student information...</p>
+    </div>
+
+    
+    <div *ngIf="errorMessage" class="p-6">
+      <div class="bg-red-50 px-6 py-4 rounded-xl text-base shadow-lg border-l-4 border-red-500 text-red-700 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span class="text-lg">{{ errorMessage }}</span>
+      </div>
+    </div>
+
+    
+    <div *ngIf="!loading && studentData" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      
+      <div class="px-8 py-6 bg-gradient-to-r from-blue-600 to-indigo-600">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center">
+            <div class="relative mr-6 hidden sm:block">
+              <div class="h-20 w-20 rounded-full border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg">
+                <span class="text-2xl font-bold text-white">
+                  {{ studentData.firstName.charAt(0) }}{{ studentData.lastName.charAt(0) }}
+                </span>
+              </div>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold tracking-wide mb-1 text-white">
+                {{ studentData.firstName }} {{ studentData.lastName }}
+              </h1>
+              <div class="flex items-center text-white/80">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Student ID: {{ studentData.uid }}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="px-4 py-2 rounded-xl text-sm font-medium inline-flex items-center gap-1.5 bg-white/10 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              Grade {{ studentData.schoolGrade }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 bg-gray-50">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-sm uppercase tracking-wider mb-1 text-blue-600 block">Gender</span>
+          <span class="text-xl font-semibold text-gray-800">{{ studentData.gender }}</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-sm uppercase tracking-wider mb-1 text-blue-600 block">Birth Date</span>
+          <span class="text-xl font-semibold text-gray-800">{{ studentData.birthday || 'Not specified' }}</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+          <span class="text-sm uppercase tracking-wider mb-1 text-blue-600 block">QR Scans</span>
+          <span class="text-xl font-semibold text-gray-800">{{ studentData.qrScans || 0 }}</span>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Personal Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <p class="text-sm mb-1 text-blue-600">Full Name</p>
+            <p class="font-medium text-gray-800">{{ studentData.firstName }} {{ studentData.lastName }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <p class="text-sm mb-1 text-blue-600">Birth Date</p>
+            <p class="font-medium text-gray-800">{{ studentData.birthday || 'Not specified' }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <p class="text-sm mb-1 text-blue-600">Gender</p>
+            <p class="font-medium text-gray-800">{{ studentData.gender }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+            <p class="text-sm mb-1 text-blue-600">Grade</p>
+            <p class="font-medium text-gray-800">Grade {{ studentData.schoolGrade }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Academic Information -->
+      <div class="p-6 bg-gray-50">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Academic Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <p class="text-sm mb-1 text-blue-600">Total QR Scans</p>
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <rect x="7" y="7" width="3" height="9"></rect>
+                <rect x="14" y="7" width="3" height="5"></rect>
+              </svg>
+              <p class="font-medium text-gray-800">{{ studentData.qrScans || 0 }}</p>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+            <p class="text-sm mb-1 text-blue-600">Joined Date</p>
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <p class="font-medium text-gray-800">{{ studentData.createdAt | date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Notes -->
+      <div *ngIf="studentData.notes" class="p-6 border-t border-gray-200">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Additional Notes
+        </h2>
+        <div class="bg-gray-50 p-5 rounded-xl">
+          <p class="text-gray-700 text-base leading-relaxed">{{ studentData.notes }}</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="p-6 flex flex-wrap justify-end gap-3 border-t border-gray-200">
+        <button class="px-4 py-2 rounded-xl flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-200 hover:scale-105">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit Profile
+        </button>
+        <button class="px-4 py-2 rounded-xl flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition-all duration-200 hover:scale-105">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Report
+        </button>
+      </div>
+
+      <!-- Test History and Performance -->
+      <div class="p-6 border-t border-gray-200">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2 text-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Test History & Performance
+        </h2>
+
+        <!-- Loading State -->
+        <div *ngIf="testStatsLoading" class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent"></div>
+        </div>
+
+        <!-- No Tests Message -->
+        <div *ngIf="!testStatsLoading && testHistory.length === 0" class="bg-gray-50 rounded-xl p-8 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p class="text-gray-500">No test history available for this student.</p>
+        </div>
+
+        <!-- Test Stats -->
+        <div *ngIf="!testStatsLoading && testHistory.length > 0">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <p class="text-sm mb-1 text-blue-600">Total Tests</p>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <p class="font-medium text-gray-800">{{ testStats.totalTests }}</p>
+              </div>
+            </div>
+
+            
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <p class="text-sm mb-1 text-blue-600">Average Score</p>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <p class="font-medium text-gray-800">{{ testStats.averageScore }}</p>
+              </div>
+            </div>
+
+            
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <p class="text-sm mb-1 text-blue-600">Success Rate</p>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <p class="font-medium text-gray-800">{{ testStats.successRate }}%</p>
+              </div>
+            </div>
+
+            
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+              <p class="text-sm mb-1 text-blue-600">Total Time Spent</p>
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <p class="font-medium text-gray-800">{{ testStats.totalTime }} sec</p>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="mb-8">
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Tests by Difficulty</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                <div class="flex justify-between items-center">
+                  <p class="text-green-700 font-medium">Easy</p>
+                  <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {{ testStats.testsByDifficulty.easy }}
+                  </span>
+                </div>
+              </div>
+
+              
+              <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                <div class="flex justify-between items-center">
+                  <p class="text-yellow-700 font-medium">Medium</p>
+                  <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {{ testStats.testsByDifficulty.medium }}
+                  </span>
+                </div>
+              </div>
+
+              
+              <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                <div class="flex justify-between items-center">
+                  <p class="text-red-700 font-medium">Hard</p>
+                  <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                    {{ testStats.testsByDifficulty.hard }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div>
+            <h3 class="text-lg font-medium mb-4 text-gray-800">Recent Tests</h3>
+            <div class="space-y-4">
+              <div *ngFor="let test of testHistory" class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex justify-between items-start mb-4">
+                  <div>
+                    <p class="text-sm text-gray-500">{{ test.date | date:'medium' }}</p>
+                    <p class="font-medium text-gray-800">Test ID: {{ test.gameId }}</p>
+                  </div>
+                  <span class="px-3 py-1 rounded-full text-sm font-medium" 
+                        [ngClass]="{'bg-green-100 text-green-800': test.totalScore >= 70, 
+                                  'bg-yellow-100 text-yellow-800': test.totalScore >= 50 && test.totalScore < 70,
+                                  'bg-red-100 text-red-800': test.totalScore < 50}">
+                    Score: {{ test.totalScore }}%
+                  </span>
+                </div>
+
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+                  <div>
+                    <span class="text-gray-600">Time Spent:</span>
+                    <p class="font-medium">{{ test.statistics?.totalTimeSpent || 0 }}s</p>
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Total Attempts:</span>
+                    <p class="font-medium">{{ test.statistics?.totalAttemptsUsed || 0 }}</p>
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Correct Answers:</span>
+                    <p class="font-medium text-green-600">{{ test.statistics?.correctAnswersCount || 0 }}</p>
+                  </div>
+                  <div>
+                    <span class="text-gray-600">Incorrect Answers:</span>
+                    <p class="font-medium text-red-600">{{ test.statistics?.incorrectAnswersCount || 0 }}</p>
+                  </div>
+                </div>
+
+                
+                <div class="space-y-4">
+                  
+                  <div *ngIf="hasGameType(test, 'findcomposition')" class="border-t pt-4">
+                    <h4 class="font-medium text-gray-800 mb-2">Number Composition</h4>
+                    <div *ngFor="let level of difficultyLevels" class="mb-3">
+                      <div *ngIf="hasAnswer(test, 'findcomposition', level)" class="ml-4">
+                        <p class="text-sm font-medium text-gray-700 capitalize mb-1">{{ level }}</p>
+                        <div class="grid grid-cols-1 gap-2 text-sm">
+                          <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                              <span class="text-gray-600">Student's Answer:</span>
+                              <span [class]="isAnswerCorrect(test, 'findcomposition', level) ? 'text-green-600' : 'text-red-600'" class="px-2 py-1 rounded text-xs font-medium">
+                                {{ isAnswerCorrect(test, 'findcomposition', level) ? '✓ Correct' : '✗ Incorrect' }}
+                              </span>
+                            </div>
+                            <p class="font-medium">{{ getStudentAnswer(test, 'findcomposition', level) }}</p>
+                          </div>
+                          <div *ngIf="!isAnswerCorrect(test, 'findcomposition', level)" class="bg-green-50 p-3 rounded-lg">
+                            <span class="text-gray-600">Correct Answer:</span>
+                            <p class="font-medium text-green-700">{{ getCorrectAnswer(test, 'findcomposition', level) }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                  <div *ngIf="hasGameType(test, 'WritetheFollowingNumberinLetters')" class="border-t pt-4">
+                    <h4 class="font-medium text-gray-800 mb-2">Write Numbers in Letters</h4>
+                    <div *ngFor="let level of difficultyLevels" class="mb-3">
+                      <div *ngIf="hasAnswer(test, 'WritetheFollowingNumberinLetters', level)" class="ml-4">
+                        <p class="text-sm font-medium text-gray-700 capitalize mb-1">{{ level }}</p>
+                        <div class="grid grid-cols-1 gap-2 text-sm">
+                          <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                              <span class="text-gray-600">Student's Answer:</span>
+                              <span [class]="isAnswerCorrect(test, 'WritetheFollowingNumberinLetters', level) ? 'text-green-600' : 'text-red-600'" class="px-2 py-1 rounded text-xs font-medium">
+                                {{ isAnswerCorrect(test, 'WritetheFollowingNumberinLetters', level) ? '✓ Correct' : '✗ Incorrect' }}
+                              </span>
+                            </div>
+                            <p class="font-medium">{{ getStudentAnswer(test, 'WritetheFollowingNumberinLetters', level) }}</p>
+                          </div>
+                          <div *ngIf="!isAnswerCorrect(test, 'WritetheFollowingNumberinLetters', level)" class="bg-green-50 p-3 rounded-lg">
+                            <span class="text-gray-600">Correct Answer:</span>
+                            <p class="font-medium text-green-700">{{ getCorrectAnswer(test, 'WritetheFollowingNumberinLetters', level) }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+                  <div *ngIf="hasGameType(test, 'IdentifthUnitsTensHundredsandThousands')" class="border-t pt-4">
+                    <h4 class="font-medium text-gray-800 mb-2">Identify Place Values</h4>
+                    <div *ngFor="let level of difficultyLevels" class="mb-3">
+                      <div *ngIf="hasAnswer(test, 'IdentifthUnitsTensHundredsandThousands', level)" class="ml-4">
+                        <p class="text-sm font-medium text-gray-700 capitalize mb-1">{{ level }}</p>
+                        <div class="space-y-3">
+                          <!-- Student's Answer -->
+                          <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                              <span class="text-gray-600">Student's Answer:</span>
+                              <span [class]="isAnswerCorrect(test, 'IdentifthUnitsTensHundredsandThousands', level) ? 'text-green-600' : 'text-red-600'" class="px-2 py-1 rounded text-xs font-medium">
+                                {{ isAnswerCorrect(test, 'IdentifthUnitsTensHundredsandThousands', level) ? '✓ Correct' : '✗ Incorrect' }}
+                              </span>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2 mt-1">
+                              <div>
+                                <span class="text-gray-500 text-xs">Units</span>
+                                <p class="font-medium">{{ getPlaceValue(test, level, 'units') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Tens</span>
+                                <p class="font-medium">{{ getPlaceValue(test, level, 'tens') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Hundreds</span>
+                                <p class="font-medium">{{ getPlaceValue(test, level, 'hundreds') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Thousands</span>
+                                <p class="font-medium">{{ getPlaceValue(test, level, 'thousands') }}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Correct Answer -->
+                          <div *ngIf="!isAnswerCorrect(test, 'IdentifthUnitsTensHundredsandThousands', level)" class="bg-green-50 p-3 rounded-lg">
+                            <span class="text-gray-600">Correct Answer:</span>
+                            <div class="grid grid-cols-4 gap-2 mt-1">
+                              <div>
+                                <span class="text-gray-500 text-xs">Units</span>
+                                <p class="font-medium text-green-700">{{ getCorrectPlaceValue(test, level, 'units') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Tens</span>
+                                <p class="font-medium text-green-700">{{ getCorrectPlaceValue(test, level, 'tens') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Hundreds</span>
+                                <p class="font-medium text-green-700">{{ getCorrectPlaceValue(test, level, 'hundreds') }}</p>
+                              </div>
+                              <div>
+                                <span class="text-gray-500 text-xs">Thousands</span>
+                                <p class="font-medium text-green-700">{{ getCorrectPlaceValue(test, level, 'thousands') }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

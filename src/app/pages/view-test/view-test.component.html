@@ -1,0 +1,729 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex flex-col justify-center items-center h-64">
+    <div class="relative w-16 h-16 mb-4">
+      <div class="absolute top-0 left-0 right-0 bottom-0 animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+      <div class="absolute top-2 left-2 right-2 bottom-2 animate-ping rounded-full h-12 w-12 border-4 border-blue-600 border-opacity-30"></div>
+    </div>
+    <p class="text-lg font-medium text-gray-700">Loading test information...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="max-w-2xl mx-auto mb-6 bg-red-50 px-6 py-4 rounded-xl border-l-4 border-red-500">
+    <div class="flex items-center text-red-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="test && !loading" class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center">
+            <div class="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-white">{{ test.title.ar }}</h1>
+              <div class="flex flex-wrap gap-2 mt-1">
+                <p class="text-xs px-2 py-1 rounded bg-white/10 text-white">AR: {{ test.title.ar }}</p>
+                <p class="text-xs px-2 py-1 rounded bg-white/10 text-white">EN: {{ test.title.en }}</p>
+                <p class="text-xs px-2 py-1 rounded bg-white/10 text-white">FR: {{ test.title.fr }}</p>
+              </div>
+              <p class="text-sm mt-2 text-white/80">{{ test.description.ar }}</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <span [class]="test.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                  class="px-4 py-1.5 rounded-full text-sm font-medium inline-flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full" [ngClass]="test.status === 'active' ? 'bg-green-500' : 'bg-red-500'"></span>
+              {{ test.status === 'active' ? 'Active' : 'Inactive' }}
+            </span>
+            <span class="text-xs text-white/80">Last updated: {{ formatDate(test.updatedAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 bg-gray-50/50">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+          <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Class</p>
+            <p class="font-medium text-gray-900">{{ test.class }}</p>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+          <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Creation Date</p>
+            <p class="font-medium text-gray-900">{{ formatDate(test.createdAt) }}</p>
+          </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+          <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Students</p>
+            <p class="font-medium text-gray-900">{{ test.students ? test.students.length : 0 }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Types -->
+      <div class="p-6 space-y-6">
+        <div *ngIf="test.games && test.games.length > 0" class="bg-white rounded-xl shadow-md border border-gray-200">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Question Types</h2>
+              </div>
+              <span class="text-sm font-medium px-3 py-1 rounded-lg bg-white/10 text-white">
+                Total: {{ test.games.length }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <div *ngIf="test.findcomposition || test.WritetheFollowingNumberinLetters || test.IdentifthUnitsTensHundredsandThousands" class="mb-4">
+              <h3 class="text-lg font-semibold mb-3 text-gray-800">Traditional Games</h3>
+              <div class="flex flex-wrap gap-2">
+                <span *ngIf="test.findcomposition"
+                      class="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-100 text-blue-800">
+                  Find Composition
+                </span>
+                <span *ngIf="test.WritetheFollowingNumberinLetters"
+                      class="px-3 py-1.5 rounded-lg text-sm font-medium bg-green-100 text-green-800">
+                  Write Number in Letters
+                </span>
+                <span *ngIf="test.IdentifthUnitsTensHundredsandThousands"
+                      class="px-3 py-1.5 rounded-lg text-sm font-medium bg-purple-100 text-purple-800">
+                  Identify Place Values
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Find Composition Exercise -->
+        <div *ngIf="test.findcomposition" class="bg-white rounded-xl shadow-md border border-gray-200">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Find Composition Exercise</h2>
+              </div>
+              <div class="px-3 py-1 rounded-lg text-sm font-medium bg-white/10 text-white">
+                {{ test.findcomposition.activeLevel | titlecase }} Level
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-6">
+            <div class="border-b border-gray-200">
+              <div class="flex">
+                <button *ngFor="let level of ['easy', 'medium', 'hard']" 
+                        (click)="changeActiveLevel('findcomposition', level)"
+                        class="px-4 py-2 font-medium text-sm transition-all duration-200"
+                        [ngClass]="{
+                          'border-b-2 border-blue-600 text-blue-600': level === test.findcomposition.activeLevel,
+                          'text-gray-500 hover:text-gray-700': level !== test.findcomposition.activeLevel
+                        }">
+                  {{ level | titlecase }}
+                </button>
+              </div>
+            </div>
+            
+            <ng-container [ngSwitch]="test.findcomposition.activeLevel">
+              <ng-container *ngSwitchCase="'easy'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.easy.time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.easy.attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'medium'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.medium.time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.medium.attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'hard'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.hard.time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.findcomposition.hard.attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Write Numbers in Letters Exercise -->
+        <div *ngIf="test.WritetheFollowingNumberinLetters" class="bg-white rounded-xl shadow-md border border-gray-200 mt-8">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Write Numbers in Letters Exercise</h2>
+              </div>
+              <div class="px-3 py-1 rounded-lg text-sm font-medium bg-white/10 text-white">
+                {{ test.WritetheFollowingNumberinLetters.activeLevel | titlecase }} Level
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-6">
+            <div class="border-b border-gray-200">
+              <div class="flex">
+                <button *ngFor="let level of ['easy', 'medium', 'hard']" 
+                        (click)="changeActiveLevel('WritetheFollowingNumberinLetters', level)"
+                        class="px-4 py-2 font-medium text-sm transition-all duration-200"
+                        [ngClass]="{
+                          'border-b-2 border-blue-600 text-blue-600': level === test.WritetheFollowingNumberinLetters.activeLevel,
+                          'text-gray-500 hover:text-gray-700': level !== test.WritetheFollowingNumberinLetters.activeLevel
+                        }">
+                  {{ level | titlecase }}
+                </button>
+              </div>
+            </div>
+            
+            <ng-container [ngSwitch]="test.WritetheFollowingNumberinLetters.activeLevel">
+              <ng-container *ngSwitchCase="'easy'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div class="mt-6">
+                  <p class="text-sm text-gray-500 mb-3">Correct Answers</p>
+                  <div class="space-y-2">
+                    <span *ngFor="let sol of test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].solution"
+                          class="bg-gray-50 text-gray-900 px-4 py-3 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md block">
+                      <p class="font-medium">{{ sol }}</p>
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'medium'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div class="mt-6">
+                  <p class="text-sm text-gray-500 mb-3">Correct Answers</p>
+                  <div class="space-y-2">
+                    <span *ngFor="let sol of test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].solution"
+                          class="bg-gray-50 text-gray-900 px-4 py-3 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md block">
+                      <p class="font-medium">{{ sol }}</p>
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'hard'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div class="mt-6">
+                  <p class="text-sm text-gray-500 mb-3">Correct Answers</p>
+                  <div class="space-y-2">
+                    <span *ngFor="let sol of test.WritetheFollowingNumberinLetters[test.WritetheFollowingNumberinLetters.activeLevel].solution"
+                          class="bg-gray-50 text-gray-900 px-4 py-3 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md block">
+                      <p class="font-medium">{{ sol }}</p>
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Place Value Identification Exercise -->
+        <div *ngIf="test.IdentifthUnitsTensHundredsandThousands" class="bg-white rounded-xl shadow-md border border-gray-200 mt-8">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="3" y1="15" x2="21" y2="15"></line>
+                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                  <line x1="15" y1="3" x2="15" y2="21"></line>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Place Value Identification Exercise</h2>
+              </div>
+              <div class="px-3 py-1 rounded-lg text-sm font-medium bg-white/10 text-white">
+                {{ test.IdentifthUnitsTensHundredsandThousands.activeLevel | titlecase }} Level
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-6">
+            <div class="border-b border-gray-200">
+              <div class="flex">
+                <button *ngFor="let level of ['easy', 'medium', 'hard']" 
+                        (click)="changeActiveLevel('IdentifthUnitsTensHundredsandThousands', level)"
+                        class="px-4 py-2 font-medium text-sm transition-all duration-200"
+                        [ngClass]="{
+                          'border-b-2 border-blue-600 text-blue-600': level === test.IdentifthUnitsTensHundredsandThousands.activeLevel,
+                          'text-gray-500 hover:text-gray-700': level !== test.IdentifthUnitsTensHundredsandThousands.activeLevel
+                        }">
+                  {{ level | titlecase }}
+                </button>
+              </div>
+            </div>
+            
+            <ng-container [ngSwitch]="test.IdentifthUnitsTensHundredsandThousands.activeLevel">
+              <ng-container *ngSwitchCase="'easy'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <p class="text-sm mb-3" style="color: #b0bec5;">Place Values</p>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Units</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.units }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Tens</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.tens }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Hundreds</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.hundreds }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Thousands</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.thousands }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              
+              <ng-container *ngSwitchCase="'medium'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <p class="text-sm mb-3" style="color: #b0bec5;">Place Values</p>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Units</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.units }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Tens</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.tens }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Hundreds</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.hundreds }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Thousands</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.thousands }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              
+              <ng-container *ngSwitchCase="'hard'">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Time (seconds)</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].time }}</p>
+                    </div>
+                  </div>
+                  <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Allowed Attempts</p>
+                      <p class="font-medium text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].attemptsAllowed }}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mt-6">
+                  <p class="text-sm text-gray-500 mb-2">Target Number</p>
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <span class="text-lg font-bold text-blue-600">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</span>
+                    </div>
+                    <p class="font-medium text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].number }}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <p class="text-sm mb-3" style="color: #b0bec5;">Place Values</p>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Units</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.units }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Tens</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.tens }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Hundreds</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.hundreds }}</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 text-center">
+                      <p class="text-sm text-gray-500 mb-1">Thousands</p>
+                      <p class="font-bold text-xl text-gray-900">{{ test.IdentifthUnitsTensHundredsandThousands[test.IdentifthUnitsTensHundredsandThousands.activeLevel].solution.thousands }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer Actions -->
+      <div class="px-8 py-6 flex flex-wrap justify-between items-center bg-white border-t border-gray-200">
+        <div>
+          <button (click)="editTest()" class="px-4 py-2 rounded-lg flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Edit Test
+          </button>
+        </div>
+        <div class="flex gap-3">
+          <button (click)="exportToPdf()" class="px-4 py-2 rounded-lg flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export PDF
+          </button>
+          <button (click)="backToTests()"
+                  class="px-6 py-2 rounded-lg flex items-center gap-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Tests
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

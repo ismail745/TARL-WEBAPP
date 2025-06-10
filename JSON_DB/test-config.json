@@ -1,0 +1,208 @@
+{
+  "tests": {
+    "test_001": {
+      "testName": {
+        "ar": "الصف الرابع - تقييم الفصل الدراسي الربيعي",
+        "fr": "4e année - Évaluation du trimestre de printemps",
+        "en": "Grade 4 - Spring Term Assessment"
+      },
+      "teacherId": "uid_789",
+      "grade": 4,
+      "testDuration": 120,
+      "isDraft": false,
+      "createdAt": "2025-04-07T10:00:00Z",
+      "updatedAt": "2025-04-08T14:30:00Z",
+      "miniGameOrder": [
+        "find_compositions", 
+        "vertical_operations", 
+        "choose_answer", 
+        "multi_step_problem",
+        "find_previous_next_number",
+        "tap_matching_pairs",
+        "order_numbers",
+        "compare_numbers",
+        "what_number_do_you_hear",
+        "decompose_number",
+        "write_number_in_letters",
+        "identify_place_value",
+        "read_number_aloud"
+      ],
+      "groupsMiniGameOrder": {
+        "group_1": [
+          "choose_answer", "find_compositions", "vertical_operations"
+        ],
+        "group_2": [
+          "vertical_operations", "choose_answer", "find_compositions"
+        ]
+      },
+      "miniGameConfigs": {
+        "find_compositions": {
+          "gradeConfig": {
+            "config": {
+              "minNumCompositions": 5, 
+              "maxNumberRange": 3, 
+              "operation": "Subtraction", 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:00:00Z"
+          },
+          "groupsConfig": {
+            "group_1": {
+              "config": {
+                "minNumCompositions": 3, 
+                "maxNumberRange": 3, 
+                "operation": "Addition", 
+                "requiredCorrectAnswersMinimumPercent": 75
+              },
+              "studentIds": [
+                "cPcF70DhyUgaL38pU37csaf8Ns23",
+                "anotherStudentId"
+              ]
+            },
+            "group_2": {
+              "config": {
+                "minNumCompositions": 2, 
+                "maxNumberRange": 3, 
+                "operation": "Addition", 
+                "requiredCorrectAnswersMinimumPercent": 60
+              },
+              "studentIds": [
+                "anotherStudentId_1"
+              ]
+            }
+          }
+        },
+        "vertical_operations": {
+          "gradeConfig": {
+            "config": {
+              "numOperations": 3,
+              "maxNumberRange": 4,
+              "operationsAllowed": ["Addition", "Subtraction"],
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:15:00Z"
+          }
+        },
+        "choose_answer": {
+          "gradeConfig": {
+            "config": {
+              "numOptions": 3,
+              "maxNumberRange": 4,
+              "operationsAllowed": ["Addition", "Subtraction"],
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:25:00Z"
+          }
+        },
+        "multi_step_problem": {
+          "gradeConfig": {
+            "config": {
+              "numSteps": 2,
+              "operationsAllowed": ["Addition", "Subtraction"],
+              "numQuestions": 2,
+              "maxNumberRange": 3, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:40:00Z"
+          }
+        },
+        "find_previous_next_number": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 2,
+              "maxNumberRange": 3, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:45:00Z"
+          }
+        },
+        "tap_matching_pairs": {
+          "gradeConfig": {
+            "config": {
+              "numPairs": 2, 
+              "maxNumberRange": 2, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:50:00Z"
+          }
+        },
+        "order_numbers": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 2,
+              "maxNumberRange": 3, 
+              "maxNumbersInSequence": 4,
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T13:55:00Z"
+          }
+        },
+        "compare_numbers": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 2,
+              "maxNumberRange": 3, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T14:00:00Z"
+          }
+        },
+        "what_number_do_you_hear": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 5,
+              "maxNumberRange": 3, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "uploadedNumbersAudioLinks": {
+              "27": { "ar": "", "fr": "", "en": "" },
+              "45": { "ar": "", "fr": "", "en": "" }
+            },
+            "updatedAt": "2025-04-08T14:05:00Z"
+          }
+        },
+        "decompose_number": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 1,
+              "maxNumberRange": 4, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T14:10:00Z"
+          }
+        },
+        "write_number_in_letters": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 2, 
+              "maxNumberRange": 1,
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T14:15:00Z"
+          }
+        },
+        "identify_place_value": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 5,
+              "maxNumberRange": 3, 
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T14:20:00Z"
+          }
+        },
+        "read_number_aloud": {
+          "gradeConfig": {
+            "config": {
+              "numQuestions": 6,
+              "maxNumberRange": 3, 
+              "displayTime": -1,
+              "requiredCorrectAnswersMinimumPercent": 75
+            },
+            "updatedAt": "2025-04-08T14:20:00Z"
+          }
+        }
+      }
+    }
+  }
+}

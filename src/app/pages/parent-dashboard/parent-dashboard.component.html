@@ -1,0 +1,17 @@
+<div *ngIf="loading" class="">
+    Loading dashboard...
+  </div>
+  
+  <div *ngIf="!loading">
+<app-nav-bar [onSectionSelected]="onSectionSelected.bind(this)"></app-nav-bar>
+    <div  class="teacher-dashboard ">
+        <app-parent-sidebar (sectionSelected)="onSectionSelected($event)"></app-parent-sidebar>
+        <div class="teacher-content ml-64 mt-16 ">
+            <app-parent-home *ngIf="selectedSection === 'parent-home'"></app-parent-home>
+            <app-child-result *ngIf="selectedSection === 'child-result'"></app-child-result>
+            <app-user-profile *ngIf="selectedSection === 'user-profile'"></app-user-profile>
+
+        </div>
+    </div>
+  </div>
+  

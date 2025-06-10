@@ -1,0 +1,16 @@
+<div *ngIf="loading" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-xl">
+    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto"></div>
+    <p class="mt-4 text-gray-700">Chargement...</p>
+  </div>
+</div>
+
+<div *ngIf="!loading">
+  <app-nav-bar [onSectionSelected]="onSectionSelected.bind(this)"></app-nav-bar>
+  <div class="teacher-dashboard">
+    <div class="teacher-content mt-16">
+      <app-user-profile *ngIf="selectedSection === 'user-profile'"></app-user-profile>
+      <app-principal-dashboardd *ngIf="selectedSection === 'principal-dashboardd'"></app-principal-dashboardd>
+    </div>
+  </div>
+</div>

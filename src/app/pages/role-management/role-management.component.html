@@ -1,0 +1,72 @@
+<h2>Role Management</h2>
+
+<div *ngIf="loading">Loading users...</div>
+
+<div *ngIf="!loading">
+  <label>
+    <input type="radio" name="filter" value="all" [(ngModel)]="filter" (change)="applyFilter()" />
+    Show All
+  </label>
+  <label style="margin-left: 16px;">
+    <input type="radio" name="filter" value="pending" [(ngModel)]="filter" (change)="applyFilter()" />
+    Show Pending Only
+  </label>
+
+  <div *ngIf="filteredUsers.length === 0" style="margin-top: 12px;">No users found.</div>
+
+  <table *ngIf="filteredUsers.length > 0" class="user-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email || 'N/A' }}</td>
+        <td *ngIf="!user.linkedTeacherId">{{ user.role }} </td>
+        <td *ngIf="user.role === 'Student' && user.linkedTeacherId">
+          {{ user.role }} of {{ getLinkedTeacherName(user) }}
+        </td>        
+        
+        <td>
+          <ng-container *ngIf="user.role === 'Student'">
+            <div *ngIf="!user.linkedTeacherId">
+              <select [(ngModel)]="user.tempTeacherId">
+                <option [ngValue]="null">Select Teacher</option>
+                <option *ngFor="let teacher of teachers" [value]="teacher.uid">
+                  {{ teacher.firstName }} {{ teacher.lastName }}
+                </option>
+              </select>
+              <button
+                class="assign-button"
+                [disabled]="!user.tempTeacherId"
+                (click)="linkStudentToTeacher(user.uid, user.tempTeacherId)">
+                Link
+              </button>
+            </div>
+            <div *ngIf="user.linkedTeacherId">
+              <button class="unlink-button" (click)="unlinkStudent(user.uid)">Unlink</button>
+            </div>            
+          </ng-container>
+        
+          <ng-container *ngIf="user.role !== 'Student' && (userRole === 'Administrator' || userRole === 'Principal')">
+            <select [(ngModel)]="user.tempRole">
+              <option value="Teacher">Teacher</option>
+              <option value="Parent">Parent</option>
+              <option *ngIf="userRole === 'Principal'" value="Administrator">Administrator</option>
+            </select>
+            <button
+              class="assign-button"
+              (click)="assignRole(user.uid, user.tempRole)">
+              {{ user.role === 'Pending' ? 'Assign Role' : 'Change Role' }}
+            </button>
+          </ng-container>
+        </td>        
+      </tr>
+    </tbody>
+  </table>
+</div>

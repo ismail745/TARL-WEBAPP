@@ -1,0 +1,96 @@
+<div class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="relative w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-xl border border-blue-100" style="min-height: 700px;">
+    <div class="px-10 pt-10 pb-32 h-full flex flex-col justify-between">
+      <div>
+        <h2 class="text-center text-3xl font-bold mb-10 text-gray-800 flex items-center justify-center">
+          <svg class="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+          </svg>
+          Teacher Information </h2>
+
+        <form [formGroup]="enseignantForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#2f3e46]">          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Phone Number</label>
+            <input formControlName="telephone" type="tel" placeholder="Phone Number"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-gray-800 placeholder-gray-400">
+            <div *ngIf="isFieldInvalid('telephone')" class="text-red-600 text-sm mt-1">{{ getFieldError('telephone') }}</div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Date of Birth</label>
+            <input formControlName="dateNaissance" type="date"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-gray-800">
+            <div *ngIf="isFieldInvalid('dateNaissance')" class="text-red-600 text-xs mt-1">{{ getFieldError('dateNaissance') }}</div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm">Academy</label>            <select formControlName="academy" (change)="onAcademyChange($event)"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white text-gray-800">
+              <option value="" disabled selected>Select your Academy</option>
+              <option value="Tangier-Tetouan-Al Hoceima">Tangier-Tetouan-Al Hoceima</option>
+              <option value="Oriental">Oriental</option>
+              <option value="Fes-Meknes">Fès-Meknès</option>
+              <option value="Rabat-Sale-Kenitra">Rabat-Salé-Kénitra</option>
+              <option value="Beni Mellal-Khenifra">Beni Mellal-Khenifra</option>
+              <option value="Casablanca-Settat">Casablanca-Settat</option>
+              <option value="Marrakech-Safi">Marrakech-Safi</option>
+              <option value="Draa-Tafilalet">Draa-Tafilalet</option>
+              <option value="Souss-Massa">Souss-Massa</option>
+              <option value="Guelmim-Oued Noun">Guelmim-Oued Noun</option>
+              <option value="Laayoune-Sakia El Hamra">Laayoune-Sakia El Hamra</option>
+              <option value="Dakhla-Oued Ed-Dahab">Dakhla-Oued Ed-Dahab</option>
+            </select>
+            <div *ngIf="isFieldInvalid('academy')" class="text-red-600 text-xs mt-1">{{ getFieldError('academy') }}</div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm">School Name</label>
+            <select formControlName="ecole"
+                    class="w-full px-4 py-2 rounded-md border focus:ring-2 transition"
+                    style="background-color: #ffffff; border-color: #708090; color: #2f3e46;"
+                    [disabled]="!schools.length">
+              <option value="" disabled selected>{{ schools.length ? 'Select your School' : 'Please select an academy first' }}</option>
+              <option *ngFor="let school of schools" [value]="school.name">
+                {{ school.name }}
+              </option>
+            </select>
+            <div *ngIf="isFieldInvalid('ecole')" class="text-red-600 text-xs mt-1">{{ getFieldError('ecole') }}</div>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm">Hire Date</label>
+            <input formControlName="dateEmbauche" type="date"
+                   class="w-full px-4 py-2 rounded-md border focus:ring-2 transition"
+                   style="background-color: #ffffff; border-color: #708090; color: #2f3e46;">
+            <div *ngIf="isFieldInvalid('dateEmbauche')" class="text-red-600 text-xs mt-1">{{ getFieldError('dateEmbauche') }}</div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block mb-1 text-sm">Subjects Taught</label>
+            <textarea formControlName="matieres_enseignees" rows="2" placeholder="Subjects taught (comma-separated)"
+                      class="w-full px-4 py-2 rounded-md border focus:ring-2 transition"
+                      style="background-color: #ffffff; border-color: #708090; color: #2f3e46;"></textarea>
+            <div *ngIf="isFieldInvalid('matieres_enseignees')" class="text-red-600 text-xs mt-1">{{ getFieldError('matieres_enseignees') }}</div>
+          </div>          <div class="pt-6 md:col-span-2">
+            <button type="submit" 
+                    [disabled]="loading"
+                    class="w-full py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center">
+              <svg *ngIf="!loading" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span *ngIf="loading" class="inline-block animate-spin mr-2">⌛</span>
+              {{ loading ? 'Submitting...' : 'SUBMIT' }}
+            </button>
+            <div *ngIf="errorMessage" class="text-red-600 text-center mt-2 bg-red-50 border border-red-200 rounded-xl p-3">{{ errorMessage }}</div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="w-full h-32">
+        <path fill="#708090" fill-opacity="1"
+          d="M0,160L40,170.7C80,181,160,203,240,192C320,181,400,139,480,128C560,117,640,139,720,138.7C800,139,880,117,960,133.3C1040,149,1120,203,1200,202.7C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z" />
+      </svg>
+    </div>
+  </div>
+</div>

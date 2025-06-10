@@ -1,0 +1,122 @@
+// Time Statistics Component Styles
+
+// Container styles
+.time-statistics-container {
+  font-family: 'Roboto', sans-serif;
+  
+  // Loading animation
+  .loading-container {
+    .animate-spin {
+      animation: spin 1s linear infinite;
+    }
+    
+    .animate-ping {
+      animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+  }
+  
+  // Card styles
+  .stat-card, .chart-card, .students-table {
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  // Chart container
+  .chart-container {
+    position: relative;
+    width: 100%;
+    
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+  
+  // Table styles
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    
+    th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    tbody tr {
+      transition: background-color 0.2s;
+    }
+  }
+  
+  // Badge styles
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    text-align: center;
+  }
+  
+  // Progress bar
+  .progress-bar {
+    transition: width 0.5s ease;
+  }
+  
+  // Hover effect
+  .hover-bg-4a5a63:hover {
+    background-color: #4a5a63;
+  }
+  
+  // Transitions
+  .transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .time-statistics-container {
+    .stats-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .charts-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .chart-container {
+      height: 300px !important;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}

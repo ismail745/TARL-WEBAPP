@@ -1,0 +1,359 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <div class="relative w-16 h-16">
+      <div class="absolute top-0 left-0 right-0 bottom-0 animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+      <div class="absolute top-2 left-2 right-2 bottom-2 animate-ping rounded-full h-12 w-12 border-4 border-blue-600 border-opacity-30"></div>
+    </div>
+  </div>
+
+  <div *ngIf="currentUser && !loading" class="max-w-7xl mx-auto">
+    <!-- Back to Dashboard Button for Principal -->
+    <div *ngIf="currentUser.role === 'Principal'" class="mb-6">
+      <button (click)="goToDashboard()"
+              class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition duration-300 hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Back to Dashboard</span>
+      </button>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="w-full md:w-1/3">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+              <div class="h-32 w-32 rounded-full border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg">
+                <span class="text-4xl font-bold text-white">
+                  {{ currentUser.firstName.charAt(0) }}{{ currentUser.lastName.charAt(0) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="pt-20 pb-6 px-6 text-center">
+            <h2 class="text-2xl font-bold mb-1 text-gray-800">
+              {{ currentUser.firstName }} {{ currentUser.lastName }}
+            </h2>
+            <p class="text-lg mb-3 text-blue-600">{{ currentUser.role }}</p>
+            <div class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium"
+                 [ngClass]="currentUser.frozen ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'">
+              <span class="h-2 w-2 rounded-full mr-2" 
+                    [ngClass]="currentUser.frozen ? 'bg-red-400' : 'bg-green-400'"></span>
+              {{ currentUser.frozen ? 'Frozen' : 'Active' }}
+            </div>
+            
+            <div class="mt-6 space-y-3 text-left text-gray-600">
+              <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>{{ currentUser.email }}</span>
+              </div>
+              <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>{{ currentUser.phone }}</span>
+              </div>
+              <div class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>ID: {{ currentUser.id_number }}</span>
+              </div>
+            </div>
+            
+            <button (click)="toggleEditMode()" 
+                    class="mt-8 w-full py-3 rounded-xl flex items-center justify-center gap-2 transition duration-200 hover:scale-105"
+                    [ngClass]="editMode ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'">
+              <svg *ngIf="!editMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              <svg *ngIf="editMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              {{ editMode ? 'Cancel Edit' : 'Edit Profile' }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="w-full md:w-2/3">
+        <div *ngIf="!editMode" class="space-y-6">
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Basic Information</h2>
+              </div>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Full Name</p>
+                <p class="font-medium text-gray-800">{{ currentUser.title }} {{ currentUser.firstName }} {{ currentUser.lastName }}</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Email</p>
+                <p class="font-medium text-gray-800">{{ currentUser.email }}</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Phone</p>
+                <p class="font-medium text-gray-800">{{ currentUser.phone }}</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">ID Number</p>
+                <p class="font-medium text-gray-800">{{ currentUser.id_number }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Address</h2>
+              </div>
+            </div>
+            
+            <div class="p-6">
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <div class="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 mt-1 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <div>
+                    <p class="font-medium text-gray-800">{{ currentUser.address.street }}</p>
+                    <p class="text-gray-600">{{ currentUser.address.city }}, {{ currentUser.address.postal_code }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="currentUser.role === 'Parent'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Parent Information</h2>
+              </div>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Children's School</p>
+                <p class="font-medium text-gray-800">{{ currentUser.children_school }}</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Number of Children</p>
+                <p class="font-medium text-gray-800">{{ currentUser.number_of_children }}</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <p class="text-sm mb-1 text-blue-600">Academic Role</p>
+                <p class="font-medium text-gray-800">{{ currentUser.academic_role }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <form *ngIf="editMode" [formGroup]="profileForm" (ngSubmit)="saveChanges()" class="space-y-6">
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Edit Basic Information</h2>
+              </div>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Title</label>
+                <select formControlName="title" 
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
+                  <option value="">Select Title</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Mrs.">Mrs.</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">First Name</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <input formControlName="firstName" type="text" 
+                         class="w-full rounded-xl border-gray-300 pl-10 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Last Name</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <input formControlName="lastName" type="text" 
+                         class="w-full rounded-xl border-gray-300 pl-10 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Phone</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                  </div>
+                  <input formControlName="phone" type="tel" 
+                         class="w-full rounded-xl border-gray-300 pl-10 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">ID Number</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                  <input formControlName="id_number" type="text" 
+                         class="w-full rounded-xl border-gray-300 pl-10 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Edit Address</h2>
+              </div>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6" formGroupName="address">
+              <div class="md:col-span-3">
+                <label class="block text-sm font-medium mb-2 text-gray-700">Street</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  </div>
+                  <input formControlName="street" type="text" 
+                         class="w-full rounded-xl border-gray-300 pl-10 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+                </div>
+              </div>
+              
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-2 text-gray-700">City</label>
+                <input formControlName="city" type="text" 
+                       class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Postal Code</label>
+                <input formControlName="postal_code" type="text" 
+                       class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Parent Information Form -->
+          <div *ngIf="currentUser.role === 'Parent'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <h2 class="text-xl font-bold text-white">Edit Parent Information</h2>
+              </div>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Children's School</label>
+                <input formControlName="children_school" type="text" 
+                       class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Number of Children</label>
+                <input formControlName="number_of_children" type="number" min="0" 
+                       class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" />
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700">Academic Role</label>
+                <select formControlName="academic_role" 
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
+                  <option value="">Select Role</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Father">Father</option>
+                  <option value="Guardian">Guardian</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-end gap-4">
+            <button type="button" (click)="revertChanges()"
+                    class="px-6 py-3 rounded-xl flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 transition duration-200 hover:scale-105">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12h18M3 12L8 7m-5 5l5 5"/>
+              </svg>
+              Cancel
+            </button>
+            <button type="submit"
+                    class="px-6 py-3 rounded-xl flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition duration-200 hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                    [disabled]="profileForm.invalid || profileForm.pristine">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

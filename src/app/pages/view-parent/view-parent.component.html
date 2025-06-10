@@ -1,0 +1,255 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+  <div class="max-w-7xl mx-auto">
+    
+    <div *ngIf="loading" class="flex flex-col justify-center items-center h-[60vh]">
+      <div class="relative w-20 h-20">
+        <div class="absolute top-0 left-0 right-0 bottom-0 animate-spin rounded-full h-20 w-20 border-4 border-blue-600 border-t-transparent"></div>
+        <div class="absolute top-2 left-2 right-2 bottom-2 animate-ping rounded-full h-16 w-16 border-4 border-blue-600 border-opacity-30"></div>
+      </div>
+      <p class="mt-4 text-gray-700 font-medium">Loading profile data...</p>
+    </div>
+
+    
+    <div *ngIf="error" class="max-w-2xl mx-auto mb-8 bg-red-50 px-6 py-4 rounded-xl text-base shadow-lg border-l-4 border-red-500">
+      <div class="flex items-center text-red-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        {{ error }}
+      </div>
+    </div>
+
+    
+    <div *ngIf="parentData && !loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+              <div class="h-32 w-32 rounded-full border-4 border-white bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg">
+                <span class="text-3xl font-bold text-white">
+                  {{ parentData.firstname.charAt(0) }}{{ parentData.lastname.charAt(0) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="pt-20 pb-6 px-6 text-center">
+            <h1 class="text-2xl font-bold mb-1 text-gray-800">
+              {{ parentData.civility }} {{ parentData.firstname }} {{ parentData.lastname }}
+            </h1>
+            <p [class]="getRoleColor(parentData.academicRole)" class="mb-3">
+              {{ parentData.academicRole }}
+            </p>
+            <span [class]="getStatusBadgeClass(!parentData.frozen)"
+                  class="px-4 py-1.5 rounded-full text-sm font-medium shadow-sm inline-flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full" [ngClass]="parentData.frozen ? 'bg-red-400' : 'bg-green-400'"></span>
+              {{ parentData.frozen ? 'Frozen' : 'Active' }}
+            </span>
+          </div>
+          
+          <div class="p-6">
+            <div class="mb-6">
+              <h3 class="text-sm uppercase tracking-wider mb-3 text-blue-600 font-medium">Contact Information</h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <span>{{ parentData.email }}</span>
+                </li>
+                <li class="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  <span>{{ parentData.phone }}</span>
+                </li>
+                <li class="flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <span>Joined: Jan 15, 2023</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div *ngIf="parentData.address">
+              <h3 class="text-sm uppercase tracking-wider mb-3 text-blue-600 font-medium">Address</h3>
+              <div class="bg-gray-50 p-4 rounded-xl">
+                <div class="flex items-start text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 mt-0.5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <div>
+                    <p class="font-medium">{{ parentData.address.street }}</p>
+                    <p class="text-gray-500">{{ parentData.address.city }}, {{ parentData.address.postalCode }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="lg:col-span-2 space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg p-4 flex flex-col">
+            <span class="text-xs font-medium uppercase tracking-wider text-white/80">ID Number</span>
+            <span class="text-xl font-bold text-white mt-1">{{ parentData.nationalId }}</span>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col border border-gray-200">
+            <span class="text-xs font-medium uppercase tracking-wider text-blue-600">Role</span>
+            <span class="text-xl font-bold text-gray-800 mt-1">{{ parentData.role }}</span>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col border border-gray-200">
+            <span class="text-xs font-medium uppercase tracking-wider text-blue-600">Children</span>
+            <span class="text-xl font-bold text-gray-800 mt-1">{{ parentData.childrenCount }}</span>
+          </div>
+        </div>
+
+        
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg font-semibold flex items-center gap-2 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Children Information
+              </h2>
+              <span class="px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-white">
+                School: {{ parentData.childrenSchool }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <div *ngIf="parentData.childrenDetails?.length" class="space-y-4">
+              <div *ngFor="let child of parentData.childrenDetails; let i = index" 
+                   class="bg-gray-50 rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]">
+                <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full flex items-center justify-center mr-4 bg-gradient-to-br from-blue-500 to-indigo-500">
+                      <span class="text-sm font-bold text-white">{{ child.firstName.charAt(0) }}{{ child.lastName.charAt(0) }}</span>
+                    </div>
+                    <div>
+                      <h3 class="font-medium text-lg text-gray-800">{{ child.firstName }} {{ child.lastName }}</h3>
+                      <div class="flex items-center mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-gray-500">{{ child.schoolGrade }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button class="px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      Grades
+                    </button>
+                    <button 
+                      (click)="viewChild(child.uid)"
+                      class="px-3 py-1.5 text-sm rounded-lg flex items-center gap-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:opacity-90 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      View Details
+                    </button>
+                  </div>
+                </div>
+                <div class="px-4 py-2 flex justify-between items-center text-xs bg-gray-100 text-gray-500">
+                  <span>ID: {{ child.uid }}</span>
+                  <span>Last Updated: 2 days ago</span>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="!parentData.childrenDetails?.length" class="p-8 text-center text-gray-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <p>No children information available</p>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <h2 class="text-lg font-semibold flex items-center gap-2 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              Additional Information
+            </h2>
+          </div>
+          
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <h3 class="text-sm font-medium mb-2 text-blue-600">Payment Status</h3>
+                <div class="flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span>Up to date</span>
+                </div>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <h3 class="text-sm font-medium mb-2 text-blue-600">Last Login</h3>
+                <div class="flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>Today, 09:45 AM</span>
+                </div>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <h3 class="text-sm font-medium mb-2 text-blue-600">Preferred Language</h3>
+                <div class="flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                  <span>Arabic, English</span>
+                </div>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl hover:bg-gray-100 transition-colors">
+                <h3 class="text-sm font-medium mb-2 text-blue-600">Communication Preference</h3>
+                <div class="flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <span>Email, SMS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

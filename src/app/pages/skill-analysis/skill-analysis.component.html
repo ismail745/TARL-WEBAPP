@@ -1,0 +1,157 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6" [dir]="langService.getCurrentLanguage() === 'ar' ? 'rtl' : 'ltr'">
+  <div class="max-w-8xl mx-auto bg-white rounded-2xl shadow-xl border border-blue-100 p-6">
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+      <div class="relative w-16 h-16">
+        <div class="absolute top-0 left-0 right-0 bottom-0 animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent"></div>
+        <div class="absolute top-2 left-2 right-2 bottom-2 animate-ping rounded-full h-12 w-12 border-4 border-blue-600 border-opacity-30"></div>
+      </div>
+      <span class="ml-3">{{ getTranslation('loading') }}</span>
+    </div>
+
+    <div *ngIf="error && !loading" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl">
+      <p>{{ getTranslation('error') }}</p>
+    </div>
+
+    <div *ngIf="!loading && !error" class="space-y-6">
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <h2 class="text-3xl font-bold text-gray-800 flex items-center" [class.flex-row-reverse]="langService.getCurrentLanguage() === 'ar'">
+          <svg [class]="langService.getCurrentLanguage() === 'ar' ? 'w-8 h-8 ml-3 text-blue-600' : 'w-8 h-8 mr-3 text-blue-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          {{ getTranslation('skillAnalysis') }}
+        </h2>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 text-white">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold mb-2 text-blue-100">{{ getTranslation('skillAnalysis') }}</h3>
+            <p class="text-3xl font-bold">{{ skillsData.length }}</p>
+          </div>
+          <div class="bg-blue-500 p-3 rounded-full">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-br from-green-600 to-green-700 rounded-xl shadow-lg p-6 text-white">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold mb-2 text-green-100">{{ getTranslation('averageSuccessRate') }}</h3>
+            <p class="text-3xl font-bold">
+              {{ skillsData.length > 0 ? (skillsData | averageSuccessRate | number:'1.0-1') : 0 }}%
+            </p>
+          </div>
+          <div class="bg-green-500 p-3 rounded-full">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center" [class.flex-row-reverse]="langService.getCurrentLanguage() === 'ar'">
+          <svg [class]="langService.getCurrentLanguage() === 'ar' ? 'w-6 h-6 ml-2 text-blue-600' : 'w-6 h-6 mr-2 text-blue-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          {{ getTranslation('successRate') }}
+        </h3>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="skillsChart"></canvas>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center" [class.flex-row-reverse]="langService.getCurrentLanguage() === 'ar'">
+          <svg [class]="langService.getCurrentLanguage() === 'ar' ? 'w-6 h-6 ml-2 text-red-600' : 'w-6 h-6 mr-2 text-red-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+          </svg>
+          {{ getTranslation('weakestSkills') }}
+        </h3>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="weakestSkillsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center" [class.flex-row-reverse]="langService.getCurrentLanguage() === 'ar'">
+        <svg [class]="langService.getCurrentLanguage() === 'ar' ? 'w-6 h-6 ml-2 text-blue-600' : 'w-6 h-6 mr-2 text-blue-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+        {{ getTranslation('skillAnalysis') }}
+      </h3>
+      
+      <div *ngIf="skillsData.length === 0" class="text-center py-12 bg-gray-50 rounded-xl">
+        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <p class="text-gray-500 text-lg">{{ getTranslation('noData') }}</p>
+      </div>
+      
+      <div *ngIf="skillsData.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 mt-4">
+          <thead>
+            <tr class="bg-gray-50">
+              <th [class]="'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getTranslation('skillName') }}
+              </th>
+              <th [class]="'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getTranslation('gameType') }}
+              </th>
+              <th [class]="'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getTranslation('difficulty') }}
+              </th>
+              <th [class]="'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getTranslation('successRate') }}
+              </th>
+              <th [class]="'px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getTranslation('attempts') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let skill of skillsData">
+              <td [class]="'px-6 py-4 whitespace-nowrap ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getSkillDisplayName(skill.gameType, skill.difficulty) }}
+              </td>
+              <td [class]="'px-6 py-4 whitespace-nowrap ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getGameTypeTranslation(skill.gameType) }}
+              </td>
+              <td [class]="'px-6 py-4 whitespace-nowrap ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ getDifficultyTranslation(skill.difficulty) }}
+              </td>
+              <td [class]="'px-6 py-4 whitespace-nowrap ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                <div class="flex items-center" [class.flex-row-reverse]="langService.getCurrentLanguage() === 'ar'">
+                  <div class="relative w-32 h-2 bg-gray-200 rounded">
+                    <div class="absolute top-0 left-0 h-2 rounded"
+                         [style.width.%]="skill.successRate"
+                         [class.bg-green-500]="skill.successRate >= 70"
+                         [class.bg-yellow-500]="skill.successRate >= 40 && skill.successRate < 70"
+                         [class.bg-red-500]="skill.successRate < 40">
+                    </div>
+                  </div>
+                  <span [class]="langService.getCurrentLanguage() === 'ar' ? 'ml-2' : 'ml-2'">
+                    {{ skill.successRate.toFixed(1) }}%
+                  </span>
+                </div>
+              </td>
+              <td [class]="'px-6 py-4 whitespace-nowrap ' + (langService.getCurrentLanguage() === 'ar' ? 'text-right' : 'text-left')">
+                {{ skill.attemptCount }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
